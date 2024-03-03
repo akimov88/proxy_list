@@ -17,3 +17,11 @@ class TypeChoices(models.TextChoices):
     SOCKS = ('SOCKS', 'socks')
 
 
+class CountryChoices(models.TextChoices):
+    RU = ('RU', 'ru')
+    US = ('US', 'us')
+    UK = ('UK', 'uk')
+    CN = ('CN', 'cn')
+    CA = ('CA', 'ca')
+    EU = ('EU', 'eu')
+    AU = ('AU', 'au')

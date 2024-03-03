@@ -1,3 +1,10 @@
-from django.shortcuts import render
+from rest_framework.viewsets import GenericViewSet
+from rest_framework.mixins import RetrieveModelMixin
 
-# Create your views here.
+from proxy_server.models import ProxyServer
+from proxy_server.serializers import ProxyServerSerializer
+
+
+class ProxyServerViewSet(RetrieveModelMixin, GenericViewSet):
+    queryset = ProxyServer.objects.all()
+    serializer_class = ProxyServerSerializer
