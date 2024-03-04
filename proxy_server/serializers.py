@@ -7,10 +7,10 @@ class ProxyServerSerializer(ModelSerializer):
         model = ProxyServer
         fields = (
             'name',
-            'ip',
+            'address',
             'port',
             'proxy_type',
             'country',
-            'available',
-            'active',
+            'is_available',
+            'is_active',
         )
