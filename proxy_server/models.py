@@ -1,7 +1,7 @@
 from django.db import models
 
 from proxy_server.base.base_models import TimestampModel, ProxyTypes
-from proxy_server.services import check_host, proxy_request
+from proxy_server.services import ContextManager
 
 
 class ProxyServer(TimestampModel):
@@ -20,4 +20,8 @@ class ProxyServer(TimestampModel):
         verbose_name_plural = 'Прокси серверы'
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        with ContextManager(address=self.address, port=self.port) as context:
+            self.is_available = context.check_host()
+            self.is_active = context.request_by_proxy()
+            self.country = context.host_info.get('countryCode')
         super().save(force_insert, force_update, using, update_fields)

@@ -1,29 +1,33 @@
 import requests
 
 
-class ProxyContext:
+class ContextManager:
     def __init__(self, address: str = 'x.agava.space', port: int = 58772):
         self.__address = address
         self.__port = port
-        self.__resource = self
+        self.__host_data = {}
 
     def __enter__(self):
-        return self.__resource
+        return self
 
     def __exit__(self, type, value, traceback):
-        self.__resource.post_work()
+        pass
 
     @property
-    def host(self):
+    def host(self) -> str:
         return f'{self.__address}:{self.__port}'
 
-    def check_host(self):
-        r = requests.get(url=f'http://ip-api.com/json/{self.__address}')
-        return r.json()
+    @property
+    def host_info(self):
+        if not self.__host_data:
+            self.check_host()
+        return self.__host_data
 
-    def proxy_request(self):
-        r = requests.get(url='https://google.com', proxies={'http': f'{self.__address}:{self.__port}'})
+    def check_host(self) -> bool:
+        r = requests.get(url=f'http://ip-api.com/json/{self.__address}')
+        self.__host_data = r.json()
         return r.ok
 
-    def post_work(self):
-        pass
+    def request_by_proxy(self, url: str = 'https://google.com') -> bool:
+        r = requests.get(url=url, proxies={'http': f'{self.__address}:{self.__port}'})
+        return r.ok
