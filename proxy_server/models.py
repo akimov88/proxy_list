@@ -21,4 +21,4 @@ class ProxyServer(TimestampModel):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         super().save(force_insert, force_update, using, update_fields)
-        check_proxy_server_task.delay(id=self.id)
+        check_proxy_server_task.delay(self)
