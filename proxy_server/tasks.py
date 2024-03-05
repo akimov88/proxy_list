@@ -15,4 +15,4 @@ def check_proxy_server_task(id: int) -> None:
         p.is_available = context.check_host()
         p.is_active = context.request_by_proxy()
         p.country = context.host_info.get('countryCode')
-        p.save()
+    p.save()

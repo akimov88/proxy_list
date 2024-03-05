@@ -18,7 +18,7 @@ class ContextManager:
         return self.__address, self.__port
 
     @property
-    def host_info(self):
+    def host_info(self) -> dict:
         if not self.__host_data:
             self.check_host()
         return self.__host_data
