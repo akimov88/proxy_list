@@ -1,6 +1,9 @@
 import requests
+import logging
 
 from proxy_server.models import ProxyServer
+
+logger = logging.Logger('proxy_server.factory')
 
 
 class ClassNotFoundError(ValueError):
@@ -18,8 +21,6 @@ class ProxyFactoryObject(object):
 class ProxySession(ProxyFactoryObject):
     def __init__(self):
         self.__server: (object, None) = None
-        self.__address: (str, None) = None
-        self.__port: (int, None) = None
         self.__session: (requests.Session, None) = None
 
     def __enter__(self):
@@ -28,8 +29,6 @@ class ProxySession(ProxyFactoryObject):
             self.__server.is_available = False
             self.__server.save()
             self.__session = requests.Session()
-            self.__address = self.__server.address
-            self.__port = self.__server.port
         else:
             raise NotAvailableProxyError
         if all((self._check_host(), self._request_by_proxy())):
@@ -41,17 +40,17 @@ class ProxySession(ProxyFactoryObject):
         self.__session = None
 
     def _check_host(self) -> bool:
-        r = requests.get(url=f'http://ip-api.com/json/{self.__address}')
+        r = requests.get(url=f'http://ip-api.com/json/{self.__server.address}')
         r.raise_for_status()
-        print('_check_host:', r)
+        logger.info(msg=f'_check_host: {r}')
         return r.ok
 
     def _request_by_proxy(self, url: str = 'https://google.com') -> bool:
-        proxies = {'http': f'{self.__address}:{self.__port}'}
+        proxies = {'http': f'{self.__server.address}:{self.__server.port}'}
         r = requests.get(url=url, proxies=proxies)
         if not r.raise_for_status():
             self.__session.proxies.update(proxies)
-        print('_request_by_proxy:', r)
+        logger.info(msg=f'_request_by_proxy: {r}')
         return r.ok
 
     @property
