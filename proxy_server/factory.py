@@ -32,7 +32,7 @@ class ProxySession(ProxyFactoryObject):
         else:
             raise NotAvailableProxyError
         if all((self._check_host(), self._request_by_proxy())):
-            return self
+            return self.__session
 
     def __exit__(self, type, value, traceback):
         self.__server.is_available = True
