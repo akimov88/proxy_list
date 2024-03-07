@@ -10,10 +10,10 @@ class ProxyServerAdmin(admin.ModelAdmin):
         'name',
         'address',
         'port',
-        'proxy_type',
+        'type',
         'username',
         'password',
-        'country',
-        'is_available',
+        'country_code',
         'is_active',
+        'is_available',
     )

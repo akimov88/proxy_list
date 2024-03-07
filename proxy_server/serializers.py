@@ -9,8 +9,8 @@ class ProxyServerSerializer(ModelSerializer):
             'name',
             'address',
             'port',
-            'proxy_type',
-            'country',
-            'is_available',
+            'type',
+            'country_code',
             'is_active',
+            'is_available',
         )
